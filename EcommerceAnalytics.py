@@ -73,8 +73,7 @@ totalsales.show()
 # 1.a.2 Total Sales in each Customer City
 print("Daily Total Sales in each City")
 totalsales = (
-    data.groupBy("purchase_dayofyear")
-    .groupBy("customer_city")
+    data.groupBy("purchase_dayofyear","customer_city")
     .agg(sum("order_products_value").alias("totalsales"))
     .orderBy(desc("totalsales"))
 )
@@ -83,8 +82,7 @@ totalsales.show()
 # 1.a.3 Total Sales in each Customer State
 print("Daily Total Sales in each State")
 totalsales = (
-    data.groupBy("purchase_dayofyear")
-    .groupBy("customer_state")
+    data.groupBy("purchase_dayofyear","customer_state")
     .agg(sum("order_products_value").alias("totalsales"))
     .orderBy(desc("totalsales"))
 )
@@ -102,8 +100,7 @@ totalorders.show()
 # 1.b.2 City wise order distribution
 print("Daily Total Orders by City")
 totalorders = (
-    data.groupBy("purchase_dayofyear")
-    .groupBy("customer_city")
+    data.groupBy("purchase_dayofyear","customer_city")
     .agg(count("id").alias("orders_per_day"))
     .orderBy(asc("purchase_dayofyear"))
 )
@@ -112,8 +109,7 @@ totalorders.show()
 # 1.b.3 State wise order distribution
 print("Daily Total Orders by State")
 totalorders = (
-    data.groupBy("purchase_dayofyear")
-    .groupBy("customer_state")
+    data.groupBy("purchase_dayofyear","customer_state")
     .agg(count("id").alias("orders_per_day"))
     .orderBy(asc("purchase_dayofyear"))
 )
@@ -176,8 +172,7 @@ totalsales.show()
 # 2.a.2 Total Sales in each Customer City
 print("Weekly Total Sales in each City")
 totalsales = (
-    data.groupBy("purchase_weekofyear")
-    .groupBy("customer_city")
+    data.groupBy("purchase_weekofyear","customer_city")
     .agg(sum("order_products_value").alias("totalsales"))
     .orderBy(desc("totalsales"))
 )
@@ -186,8 +181,7 @@ totalsales.show()
 # 2.a.3 Total Sales in each Customer State
 print("Weekly Total Sales in each State")
 totalsales = (
-    data.groupBy("purchase_weekofyear")
-    .groupBy("customer_state")
+    data.groupBy("purchase_weekofyear","customer_state")
     .agg(sum("order_products_value").alias("totalsales"))
     .orderBy(desc("totalsales"))
 )
@@ -205,8 +199,7 @@ totalorders.show()
 # 2.b.2 City wise order distribution
 print("Weekly Total Orders by City")
 totalorders = (
-    data.groupBy("purchase_weekofyear")
-    .groupBy("customer_city")
+    data.groupBy("purchase_weekofyear","customer_city")
     .agg(count("id").alias("orders_per_week"))
     .orderBy(asc("purchase_weekofyear"))
 )
@@ -215,8 +208,7 @@ totalorders.show()
 # 2.b.3 State wise order distribution
 print("Weekly Total Orders by State")
 totalorders = (
-    data.groupBy("purchase_weekofyear")
-    .groupBy("customer_state")
+    data.groupBy("purchase_weekofyear","customer_state")
     .agg(count("id").alias("orders_per_week"))
     .orderBy(asc("purchase_weekofyear"))
 )
@@ -270,8 +262,7 @@ totalorders.show()
 # 2.d.1 Freight charges distribution in each customer city
 print("Weekly Total Freight Charge in each City")
 totalorders = (
-    data.groupBy("purchase_weekofyear")
-    .groupBy("customer_city")
+    data.groupBy("purchase_weekofyear","customer_city")
     .agg(sum("order_freight_value").alias("total_freight_charge"))
     .orderBy(asc("purchase_weekofyear"))
 )
