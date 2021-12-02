@@ -49,17 +49,17 @@ data = spark.read.csv(
 )
 
 
-data.withColumn("order_purchase_date", to_date(col("order_purchase_timestamp"), "dd/mm/yy HH:mm"))
-data.withColumn("order_approval_date", to_date(col("order_approved_at"), "dd/mm/yy HH:mm"))
-data.withColumn("order_delivered_date", to_date(col("order_delivered_customer_date"), "dd/mm/yy HH:mm"))
+data.withColumn("order_purchase_date", to_date(data.order_purchase_timestamp, "dd/mm/yy HH:mm"))
+data.withColumn("order_approval_date", to_date(data.order_approved_at, "dd/mm/yy HH:mm"))
+data.withColumn("order_delivered_date", to_date(data.order_delivered_customer_date, "dd/mm/yy HH:mm"))
 
 # Daily Insights
-data.withColumn("purchase_dayofyear", dayofyear(col("order_purchase_date")))
-data.withColumn("approved_dayofyear", dayofyear(col("order_approval_date")))
-data.withColumn("delivered_dayofyear", dayofyear(col("order_delivered_date")))
+data.withColumn("purchase_dayofyear", dayofyear(data.order_purchase_date))
+data.withColumn("approved_dayofyear", dayofyear(data.order_approval_date))
+data.withColumn("delivered_dayofyear", dayofyear(data.order_delivered_date))
 
-data.withColumn("approval_daily_time_taken", col("approved_dayofyear") - col("purchase_dayofyear"))
-data.withColumn("delivery_daily_time_taken", col("delivered_dayofyear") - col("approved_dayofyear"))
+data.withColumn("approval_daily_time_taken", data.approved_dayofyear - data.purchase_dayofyear)
+data.withColumn("delivery_daily_time_taken", data.delivered_dayofyear - data.approved_dayofyear)
 
 # 1.a.1 Total Sales (order_products_value)
 print("Daily Total Sales")
@@ -157,12 +157,12 @@ totalorders.show()
 
 
 # Weekly Insights
-data.withColumn("purchase_weekofyear", weekofyear(col("order_purchase_date")))
-data.withColumn("approved_weekofyear", weekofyear(col("order_approval_date")))
-data.withColumn("delivered_weekofyear", weekofyear(col("order_delivered_date")))
+data.withColumn("purchase_weekofyear", weekofyear(data.order_purchase_date))
+data.withColumn("approved_weekofyear", weekofyear(data.order_approval_date))
+data.withColumn("delivered_weekofyear", weekofyear(data.order_delivered_date))
 
-data.withColumn("approval_weekly_time_taken", col("approved_weekofyear") - col("purchase_weekofyear"))
-data.withColumn("delivery_weekly_time_taken", col("delivered_weekofyear") - col("approved_weekofyear"))
+data.withColumn("approval_weekly_time_taken", data.approved_weekofyear - data.purchase_weekofyear)
+data.withColumn("delivery_weekly_time_taken", data.delivered_weekofyear - data.approved_weekofyear)
 
 # 2.a.1 Total Sales (order_products_value)
 print("Weekly Total Sales")
