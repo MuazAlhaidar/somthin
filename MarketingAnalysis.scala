@@ -16,7 +16,9 @@ var spark = SparkSession.builder.getOrCreate();
 // 1.1 RDD -> DF
 var dataRDD = sc.textFile("EdurekaSparkProjects/dataset_bank-full.csv");
 var splitRDD = dataRDD.map(input => {
-	var splitvalues = ";".r.split(input);
+	var cleanedValues = input.replace(";"," ").replace("""""","")
+	var splitvalues = split(" ")
+	// var splitvalues = ";".r.split(input).replace();
 	splitvalues;
 });
 
