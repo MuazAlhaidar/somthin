@@ -16,23 +16,10 @@ var spark = SparkSession.builder.getOrCreate();
 // 1.1 RDD -> DF
 var dataRDD = sc.textFile("EdurekaSparkProjects/dataset_bank-full.csv");
 var splitRDD = dataRDD.map(input => {
-	var cleanedValues = input.replace(";"," ").replace("""""","")
-	var splitvalues = " ".r.split(cleanedValues)
+	var cleanedValues = input.replace(";"," ").replace("""""","");
+	var splitvalues = " ".r.split(cleanedValues);
 	// var splitvalues = ";".r.split(input).replace();
 	splitvalues;
 });
 
 dataRDD.take(10)
-
-// 1.2 RDD -> Save the data -> DF
-
-
-// 1.3 DF
-// var marketingDF = spark.read.format("csv").option("header","true").option("inferSchema","true").option("delimiter",";").option("quote","").load("EdurekaSparkProjects/dataset_bank-full.csv");
-
-// for (colname <- marketingDF.columns) {
-// 	marketingDF = marketingDF.withColumn(colname.replace(""""""", ""),trim(col(colname), """""""));
-// 	marketingDF = marketingDF.drop(colname);
-// }
-
-// marketingDF.show();
