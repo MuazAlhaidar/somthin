@@ -7,7 +7,7 @@ import org.apache.spark.ml.linalg.Vectors;
 import org.apache.spark.ml.feature.VectorAssembler;
 import org.apache.spark.sql.{Column => col};
 import org.apache.spark.ml.regression.LinearRegression;
-import org.apache.spark.sql.types.{StringType,NumericType,StructType,StructField};
+import org.apache.spark.sql.types.{StringType,IntegerType,StructType,StructField};
 
 var spark = SparkSession.builder.getOrCreate();
 
@@ -26,23 +26,23 @@ var topRowRemovedRDD = dataRDD.zipWithIndex().collect {
 };
 
 var mySchema = StructType(Array(
-	StructField("age",NumericType,true),
+	StructField("age",IntegerType,true),
 	StructField("job", StringType, true),
 	StructField("marital", StringType, true),
 	StructField("education", StringType, true),
 	StructField("default", StringType, true),
-	StructField("balance", NumericType, true),
+	StructField("balance", IntegerType, true),
 	StructField("housing", StringType, true),
 	StructField("loan", StringType, true),
 	StructField("contact", StringType, true),
-	StructField("day", NumericType, true),
+	StructField("day", IntegerType, true),
 	StructField("month", StringType, true),
-	StructField("duration", NumericType, true),
-	StructField("campaign", NumericType, true),
-	StructField("pdays", NumericType, true),
-	StructField("previous", NumericType, true),
+	StructField("duration", IntegerType, true),
+	StructField("campaign", IntegerType, true),
+	StructField("pdays", IntegerType, true),
+	StructField("previous", IntegerType, true),
 	StructField("poutcome", StringType, true),
-	StructField("y", StringType, true),
+	StructField("y", StringType, true)
 ));
 
 var dataDF = spark.createDataFrame(topRowRemovedRDD, mySchema);
