@@ -56,20 +56,19 @@ var counts = dataDF.groupBy("y").count();
 var rates = counts.withColumn("rates", (counts("count")/dataDF.count())*100);
 
 // 3 Maximum, Mean, Minimum age of average targeted customer
-var statValues = dataDF.select(max("age"), mean("age"), min("age"));
+var statValues = dataDF.select(org.apache.spark.sql.functions.max("age"), org.apache.spark.sql.functions.mean("age"), org.apache.spark.sql.functions.min("age"));
 
 // 4 Check quality of customers by checking average balance, median balance of customers
 var avgBalance = dataDF.select(mean("balance"));
 var sortedBalanceDF = dataDF.orderBy("balance");
-var medianBalance = sortedBalanceDF.collect()(round(sortedBalanceDF.select(count("age")).collect()(0) / 2))(5);
+var medianBalance = sortedBalanceDF.collect()(scala.math.round(sortedBalanceDF.select(count("age")).collect()(0) / 2))(5);
 
 // 5 Check if age matters in marketing subscription for deposit
-var ageVsSub = data.groupBy("age").count("y").orderBy(desc("count"));
+var ageVsSub = dataDF.groupBy("age").count("y").orderBy(desc("count"));
 
 // 6 Check if marital status matters in marketing subscription for deposit
-var maritalVsSub = data.groupBy("marital").count("y").orderBy(desc("count"));
+var maritalVsSub = dataDF.groupBy("marital").count("y").orderBy(desc("count"));
 
 // 7 Check if age and marital status matters in marketing subscription for deposit\
 
 // 8 Do feature engineering for column - age and find right age effect on compaign
-// Trying to get this to update
