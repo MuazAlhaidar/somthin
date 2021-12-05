@@ -72,3 +72,4 @@ var maritalVsSub = data.groupBy("marital").count("y").orderBy(desc("count"));
 // 7 Check if age and marital status matters in marketing subscription for deposit\
 
 // 8 Do feature engineering for column - age and find right age effect on compaign
+// Trying to get this to update
