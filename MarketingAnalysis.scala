@@ -64,11 +64,24 @@ var sortedBalanceDF = dataDF.orderBy("balance");
 var medianBalance = sortedBalanceDF.collect()(scala.math.round(sortedBalanceDF.select(count("age")).collect()(0) / 2))(5);
 
 // 5 Check if age matters in marketing subscription for deposit
-var ageVsSub = dataDF.groupBy("age").withColumn(where(col("y") === "no").count()).withColumn(where(col("y") === "yes").count());
+var ageVsSub = dataDF.groupBy("age", "y").count().orderBy(desc("age"));
 
 // 6 Check if marital status matters in marketing subscription for deposit
-var maritalVsSub = dataDF.groupBy("marital").withColumn(where(col("y") === "no").count()).withColumn(where(col("y") === "yes").count());
+var maritalVsSub = dataDF.groupBy("marital", "y").count().orderBy(desc("count"));
 
 // 7 Check if age and marital status matters in marketing subscription for deposit\
+var bothVsSub = dataDF.groupBy("marital", "age", "y").count().orderBy(desc("count"));
 
 // 8 Do feature engineering for column - age and find right age effect on compaign
+var learningDF = dataDF.select(col("y").alias("label"), col("age"));
+var assembler = new VectorAssembler().setInputCols(Array("age")).setOutputCol("features");
+
+var learningDF2 = assembler.transform(learningDF).select(col("label"), col("features"));
+
+var lr = new LinearRegression();
+var lrModel = lr.fit(learningDF2);
+
+var trainingSummary = lrModel.summary;
+trainingSummary.residuals.show();
+trainingSummary.rootMeanSquaredError;
+trainingSummary.meanSquaredError;
