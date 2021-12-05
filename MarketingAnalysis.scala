@@ -31,3 +31,20 @@ var rowRDD = topRowRemovedRDD.map(input => {
 var mySchema = StructType(Array( StructField("age",IntegerType,true),StructField("job", StringType, true),StructField("marital", StringType, true),StructField("education", StringType, true),StructField("default", StringType, true),StructField("balance", IntegerType, true),StructField("housing", StringType, true),StructField("loan", StringType, true),StructField("contact", StringType, true),StructField("day", IntegerType, true),StructField("month", StringType, true),StructField("duration", IntegerType, true),StructField("campaign", IntegerType, true),StructField("pdays", IntegerType, true),StructField("previous", IntegerType, true),StructField("poutcome", StringType, true),StructField("y", StringType, true)));
 
 var dataDF = spark.createDataFrame(rowRDD, mySchema);
+
+// 1.2 RDD -> Save the data -> DF
+var commaRDD = sc.textFile("EdurekaSparkProjects/dataset_bank-full.csv").map(input => {
+	var commaRows = input.replace(";"," ").replace("\"", "").replace(" ", ",");
+	commaRows;
+});
+commaRDD.saveAsTextFile("EdurekaSparkProjects/rddsavedf.csv");
+
+var savedDF = spark.read.format("csv").option("header","true").option("inferSchema","true").load("EdurekaSparkProjects/rddsavedf.csv");
+
+// 1.3 DF
+var marketingDF = spark.read.format("csv").option("header","true").option("inferSchema","true").option("delimiter",";").option("quote","").load("EdurekaSparkProjects/dataset_bank-full.csv");
+
+for (colname <- marketingDF.columns) {
+	marketingDF = marketingDF.withColumn(colname.replace(""""""", ""),trim(col(colname), """""""));
+	marketingDF = marketingDF.drop(colname);
+}
