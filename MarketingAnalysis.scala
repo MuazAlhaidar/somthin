@@ -64,10 +64,10 @@ var sortedBalanceDF = dataDF.orderBy("balance");
 var medianBalance = sortedBalanceDF.collect()(scala.math.round(sortedBalanceDF.select(count("age")).collect()(0) / 2))(5);
 
 // 5 Check if age matters in marketing subscription for deposit
-var ageVsSub = dataDF.groupBy("age").count("y").orderBy(desc("count"));
+var ageVsSub = dataDF.groupBy("age").withColumn(where(col("y") === "no").count()).withColumn(where(col("y") === "yes").count());
 
 // 6 Check if marital status matters in marketing subscription for deposit
-var maritalVsSub = dataDF.groupBy("marital").count("y").orderBy(desc("count"));
+var maritalVsSub = dataDF.groupBy("marital").withColumn(where(col("y") === "no").count()).withColumn(where(col("y") === "yes").count());
 
 // 7 Check if age and marital status matters in marketing subscription for deposit\
 
