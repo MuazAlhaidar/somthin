@@ -46,7 +46,7 @@ var savedDF = spark.read.format("csv").option("header","true").option("inferSche
 var marketingDF = spark.read.format("csv").option("header","true").option("inferSchema","true").option("delimiter",";").option("quote","").load("EdurekaSparkProjects/dataset_bank-full.csv");
 
 for (colname <- marketingDF.columns) {
-	marketingDF = marketingDF.withColumn(colname.replace(""""""", ""),trim(col(colname), """""""));
+	marketingDF = marketingDF.withColumn(colname.replace("\"", ""),trim(col(colname), """""""));
 	marketingDF = marketingDF.drop(colname);
 }
 
@@ -69,19 +69,19 @@ var ageVsSub = dataDF.groupBy("age", "y").count().orderBy(desc("age"));
 // 6 Check if marital status matters in marketing subscription for deposit
 var maritalVsSub = dataDF.groupBy("marital", "y").count().orderBy(desc("count"));
 
-// 7 Check if age and marital status matters in marketing subscription for deposit\
+// 7 Check if age and marital status matters in marketing subscription for deposit
 var bothVsSub = dataDF.groupBy("marital", "age", "y").count().orderBy(desc("count"));
 
 // 8 Do feature engineering for column - age and find right age effect on compaign
-var learningDF = dataDF.select(col("y").alias("label"), col("age"));
+dataDF = dataDF.withColumn("y_value", when(col("y").equalTo("no"), 0).otherwise(1));
+
+var learningDF = dataDF.select(col("y_value").alias("label"), col("age"));
 var assembler = new VectorAssembler().setInputCols(Array("age")).setOutputCol("features");
 
 var learningDF2 = assembler.transform(learningDF).select(col("label"), col("features"));
 
 var lr = new LinearRegression();
-var lrModel = lr.fit(learningDF2);
+var div_df = learningDF2.randomSplit(Array(.8,.2));
+var lrModel = lr.fit(div_df(0)).transform(div_df(1));
 
-var trainingSummary = lrModel.summary;
-trainingSummary.residuals.show();
-trainingSummary.rootMeanSquaredError;
-trainingSummary.meanSquaredError;
+var finalPrediction = lrModel.groupBy("features").avg("prediction").orderBy(desc("avg(prediction)"));
