@@ -26,24 +26,6 @@ schema = StructType(
     ]
 )
 
-"""
- 1. id
- 2. order_status
- 3. order_products_value
- 4. order_freight_value
- 5. order_items_qty
- 6. customer_city
- 7. customer_state
- 8. customer_zip_code_prefix
- 9. product_name_length
-10. product_description_length
-11. product_photos_qty
-12. review_score
-13. order_purchase_timestamp
-14. order_approved_at
-15. order_delivered_customer_date
-"""
-
 data = spark.read.csv(
     "EdurekaSparkProjects/olist_public_dataset.csv", header=False, schema=schema
 )
